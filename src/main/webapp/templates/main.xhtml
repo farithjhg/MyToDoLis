@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title><ui:insert name="pageTitle" /></title>
+	<style>
+		table  {width:100%;}
+	</style>
+</h:head>
+<h:body>
+
+	<h:form>
+		<h:graphicImage value="/images/logo.jpg" alt="" border="0"
+			styleClass="component_name" />
+		<rich:toolbar height="26" itemSeparator="grid">
+			<rich:toolbarGroup location="left">
+				<h:outputText value="Bienvenido, #{userBean.userName}" />
+			</rich:toolbarGroup>
+			<rich:toolbarGroup location="right">
+                            <h:commandLink action="#{loginMB.logout}" immediate="true" >Logout</h:commandLink>
+			</rich:toolbarGroup>
+		</rich:toolbar>
+		<hr />
+		<rich:panel>
+			<f:facet name="header">
+				<ui:insert name="pageHeader">Page Header</ui:insert>
+			</f:facet>
+			<ui:insert name="body">Page Body</ui:insert>
+		</rich:panel>
+		<br />
+		<div
+			style="COLOR: #0061FF; FONT-SIZE: smaller; FONT-FAMILY: 'Tahoma'; text-align: center"
+			class="footer-text">Copyright (c) 2013, Power by Farith</div>
+	</h:form>
+</h:body>
+</html>

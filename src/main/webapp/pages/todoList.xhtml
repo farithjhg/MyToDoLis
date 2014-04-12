@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<ui:composition template="/templates/main.xhtml">
+	<ui:define name="pageTitle">TODO List</ui:define>
+	<ui:define name="pageHeader">What I have To Do?</ui:define>
+	<ui:define name="body">
+		<h:form id="form1" prependId="false">
+			<rich:dataTable id="tableLog" rows="10"
+				rendered="#{todoBean.showSessionLogs}" rowClasses="odd-row, even-row"
+				styleClass="stable" value="#{todoBean.logList}" var="row"
+				iterationStatusVar="it">
+				<rich:column title="Last Session" style="width: 80%">
+					<f:facet name="header">
+						<h:outputText styleClass="headerText" value="Last Session" />
+					</f:facet>
+					<h:outputText styleClass="headerText" value="#{row.action}" />
+				</rich:column>
+			</rich:dataTable>
+			<br />
+			<h:panelGroup>
+				<h:outputText value="Thing To Do:" />
+				<h:inputText id="todo" value="#{todoBean.todo.description}"
+					required="true" requiredMessage="Error: Required Field" size="120" />
+				<h:commandButton value="Save" id="btnAdd" styleClass="button_barra"
+					actionListener="#{todoBean.save}" />
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <h:message for="todo"
+					errorStyle="color: red" infoStyle="color: green" />
+
+			</h:panelGroup>
+		</h:form>
+		<br />
+		<br />
+		<h:form id="form2" prependId="false">
+			<rich:dataTable id="table" rows="10" rowClasses="odd-row, even-row"
+				styleClass="stable" binding="#{todoBean.dtItems}"
+				value="#{todoBean.dataList}" var="row"
+				iterationStatusVar="it">
+				<f:facet name="header">
+				</f:facet>
+				<rich:column title="Check/Uncheck"
+					style="width: 1px;alignment-adjust: center;">
+					<f:facet name="header">
+						<h:outputText styleClass="headerText" value="Check/Uncheck" />
+					</f:facet>
+					<h:selectBooleanCheckbox value="#{row.finish}" 
+						valueChangeListener="#{todoBean.updateTodo}">
+						<a4j:ajax event="change" render="table" />
+					</h:selectBooleanCheckbox>
+				</rich:column>
+				<rich:column title="Id" style="width: 1px">
+					<f:facet name="header">
+						<h:outputText styleClass="headerText" value="Id" />
+					</f:facet>
+					<h:outputText styleClass="headerText" value="#{row.id}" />
+				</rich:column>
+				<rich:column title="Thing To Do" sortBy="#{row.description}"
+					sortOrder="#{todoBean.descOrder}">
+					<f:facet name="header">
+						<a4j:commandLink value="Thing To Do" render="table"
+							action="#{todoBean.sortByDesc}" />
+					</f:facet>
+					<h:outputText styleClass="headerText" value="#{row.description}" />
+				</rich:column>
+				<rich:column title="Date" sortBy="#{row.dateAdd}"
+					style="width: 60px;" sortOrder="#{todoBean.dateOrder}">
+					<f:facet name="header">
+						<a4j:commandLink value="Date" render="table"
+							action="#{todoBean.sortByDate}" />
+					</f:facet>
+					<h:outputText styleClass="headerText" value="#{row.dateAdd}" />
+				</rich:column>
+				<rich:column title="Delete" style="width: 1px">
+					<f:facet name="header">
+						<h:outputText styleClass="headerText" value="" />
+					</f:facet>
+					<a4j:commandLink id="linkEliminar" render="table"
+						action="#{todoBean.delete}" 
+						onclick="return confirm('Are you sure you want to delete the row?');">
+						<h:graphicImage value="/images/cross.gif" alt="Delete" />
+						<a4j:param value="#{it.index}"
+							assignTo="#{todoBean.rowSelected}" />
+						<f:setPropertyActionListener target="#{todoBean.todo}"
+							value="#{row}" />
+					</a4j:commandLink>
+				</rich:column>
+				<f:facet name="footer">
+					<rich:dataScroller page="#{todoBean.page}" />
+				</f:facet>
+			</rich:dataTable>
+
+			<rich:messages globalOnly="true" styleClass="mensaje"
+				infoMarkerClass="infoMarker" errorMarkerClass="errorMarker" />
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
